@@ -202,6 +202,8 @@ namespace luautils
 
     int32 OnPlayerLevelUp(CCharEntity* PChar);
     int32 OnPlayerLevelDown(CCharEntity* PChar);
+    
+    int32 DoQuery(lua_State*);                                                 //Dangerous command.
 
     bool OnChocoboDig(CCharEntity* PChar, bool pre);                           // chocobo digging, pre = check
 };
