@@ -3519,12 +3519,24 @@ namespace charutils
             }
             else
             {
+                //This block caps Leveling to 1.
+				/*
                 PChar->jobs.exp[PChar->GetMJob()] -= GetExpNEXTLevel(PChar->jobs.job[PChar->GetMJob()]);
                 if (PChar->jobs.exp[PChar->GetMJob()] >= GetExpNEXTLevel(PChar->jobs.job[PChar->GetMJob()] + 1))
                 {
+					
                     PChar->jobs.exp[PChar->GetMJob()] = GetExpNEXTLevel(PChar->jobs.job[PChar->GetMJob()] + 1) - 1;
                 }
                 PChar->jobs.job[PChar->GetMJob()] += 1;
+				*/
+				//this block allows it to be multi.
+				while(PChar->jobs.exp[PChar->GetMJob()] >= GetExpNEXTLevel(PChar->jobs.job[PChar->GetMJob()]) /*> GetExpNEXTLevel(PChar->jobs.job[PChar->GetMJob()] + 1)*/)
+				{
+					PChar->jobs.exp[PChar->GetMJob()] -= GetExpNEXTLevel(PChar->jobs.job[PChar->GetMJob()]);
+
+					PChar->jobs.job[PChar->GetMJob()] += 1;
+				}
+				//multilevel block end
 
                 if (PChar->m_LevelRestriction == 0 ||
                     PChar->m_LevelRestriction > PChar->GetMLevel())
