@@ -134,6 +134,7 @@ namespace luautils
 
         lua_register(LuaHandle, "getCorsairRollEffect", luautils::getCorsairRollEffect);
         lua_register(LuaHandle, "getSpell", luautils::getSpell);
+        lua_register(LuaHandle, "DoQuery", luautils::DoQuery);
 
         Lunar<CLuaAbility>::Register(LuaHandle);
         Lunar<CLuaAction>::Register(LuaHandle);
@@ -4414,5 +4415,22 @@ namespace luautils
 
         return canDig;
     }
-
+    /************************************************************************
+    *                                                                       *
+    *  SQL injection function, very insecure.                               *
+    *                                                                       *
+    ************************************************************************/
+    int32 DoQuery(lua_State* L)
+	{
+		DSP_DEBUG_BREAK_IF(lua_isnil(L, -1) || !lua_isstring(L, -1));
+		int32 ret = Sql_Query(SqlHandle, "%s", lua_tostring(L, -1));
+		std::string res = "";
+		if (ret != SQL_ERROR &&
+            Sql_NumRows(SqlHandle) != 0 &&
+            Sql_NextRow(SqlHandle) == SQL_SUCCESS)
+        {
+			lua_pushstring(L, Sql_GetData(SqlHandle, 0));
+            return 1;
+        }
+        return 0;
 }; // namespace luautils
